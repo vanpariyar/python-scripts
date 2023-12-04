@@ -1,0 +1,28 @@
+Create a file called .env in the same dir where you put this script:
+
+```shell
+FILE=<path/to/file/with/ids.jsonl>
+WP_STATUS_FILE=/tmp/wp-deleted-records.jsonl
+
+# Change this to PROD url if deleting from Prod
+WP_ENDPOINT=https://www.example.com/wp-json/wp/v2/posts
+WP_USERNAME=<user>
+WP_PASSWORD=<pwd>
+BULK_SIZE=5
+APP_LOG_LEVEL=DEBUG
+TIMEOUT_SEC=600
+```
+
+Then Run
+```
+$ python3 -m pip install -r requirements.txt
+$ ENV=.env python3 delete_wp_records.py
+```
+
+The input .jsonl file should have the following structure. It can have more fields (ignored), but needs the id field:
+
+```JSON
+{"id": 1234}
+{"id": 2234}
+{"id": 124}
+```
