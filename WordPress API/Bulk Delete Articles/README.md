@@ -19,7 +19,7 @@ $ python3 -m pip install -r requirements.txt
 $ ENV=.env python3 delete_wp_records.py
 ```
 
-The input .jsonl file should have the following structure. It can have more fields (ignored), but needs the id field:
+The `input.jsonl` file should have the following structure. It can have more fields (ignored), but needs the id field:
 
 ```JSON
 {"id": 1234}
