@@ -35,31 +35,45 @@ def upload_image_to_wp(image_url):
         response = requests.get(image_url)
         response.raise_for_status()
         image_data = response.content
+
+        # Generate filename with fallback
         filename = os.path.basename(image_url.split("?")[0])
+        if not filename or "." not in filename:
+            filename = "image.jpg"
+
+        # Get content type or default
+        content_type = response.headers.get("Content-Type", "image/jpeg")
+
+        files = {
+            'file': (filename, image_data, content_type),
+        }
 
         headers = {
             'Content-Disposition': f'attachment; filename={filename}',
-            'Content-Type': 'image/jpeg',
         }
 
         upload_response = requests.post(
             f"{WP_SITE_URL}/wp-json/wp/v2/media",
-            headers=headers,
             auth=AUTH,
-            data=image_data
+            files=files,
+            headers=headers
         )
         upload_response.raise_for_status()
 
         media = upload_response.json()
         logging.info(f"✅ Uploaded image: {filename} (Media ID: {media['id']})")
         return media['id'], media['source_url']
-    except Exception as e:
-        logging.error(f"❌ Failed to upload image: {e}")
+    except requests.exceptions.HTTPError as err:
+        logging.error(f"❌ Failed to upload image: {err} - {err.response.text}")
         return None
+    except Exception as e:
+        logging.error(f"❌ Unexpected error during image upload: {e}")
+        return None
+
 
 def set_featured_image(post_id, media_id, post_type):
     try:
-        post_url = f"{WP_SITE_URL}/wp-json/wp/v2/{post_type}/{post_id}"
+        post_url = f"{WP_SITE_URL}/wp-json/wp/v2/{post_type}/{post_id}?context=edit"
         response = requests.post(post_url, auth=AUTH, json={'featured_media': media_id})
         response.raise_for_status()
         logging.info(f"✅ Set featured image for post ID {post_id}")
@@ -75,7 +89,7 @@ def append_image_block(post_id, image_url, post_type):
 
         content = post['content'].get('raw') or post['content'].get('rendered', '')
 
-        new_content = content + f'\n<!-- wp:image -->\n<figure class="wp-block-image"><img src="{image_url}" alt=""/></figure>\n<!-- /wp:image -->'
+        new_content = f'\n<!-- wp:image -->\n<figure class="wp-block-image"><img src="{image_url}" alt=""/></figure>\n<!-- /wp:image -->' + content
 
         update_response = requests.post(post_url, auth=AUTH, json={'content': new_content})
         update_response.raise_for_status()

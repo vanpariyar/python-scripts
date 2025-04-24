@@ -9,7 +9,7 @@ A command-line tool that reads a CSV with WordPress post IDs and image URLs, upl
 ### 1. Clone the repo & install requirements
 
 ```bash
-pip install -r requirements.txt
+$ python3 -m pip install -r requirements.txt
 ```
 
 ### 2. Configure `.env`
@@ -26,7 +26,7 @@ WP_APP_PASSWORD=your_wp_application_password
 
 ## 📄 CSV Format
 
-Your CSV should include the following columns:
+Your CSV should include the following columns: (articles.csv)
 
 ```csv
 post_id,image_url
@@ -39,7 +39,7 @@ post_id,image_url
 ## 🚀 Run the Script
 
 ```bash
-python wp_image_uploader.py --csv your_articles.csv --post_type post
+python wp_image_uploader.py --csv articles.csv --post_type post
 ```
 
 - `--post_type` is optional. Default: `posts`
