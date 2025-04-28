@@ -39,7 +39,7 @@ post_id,image_url
 ## 🚀 Run the Script
 
 ```bash
-python wp_image_uploader.py --csv articles.csv --post_type post
+ENV=.env python3 wp_image_uploader.py --csv articles.csv --post_type post
 ```
 
 - `--post_type` is optional. Default: `posts`

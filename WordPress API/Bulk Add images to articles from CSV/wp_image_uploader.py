@@ -74,11 +74,20 @@ def upload_image_to_wp(image_url):
 def set_featured_image(post_id, media_id, post_type):
     try:
         post_url = f"{WP_SITE_URL}/wp-json/wp/v2/{post_type}/{post_id}?context=edit"
-        response = requests.post(post_url, auth=AUTH, json={'featured_media': media_id})
+        payload = {
+            'featured_media': media_id,
+            'acf': {
+                'public': {
+                    'show_on_homecategory_pages': True
+                }
+            }
+        }
+        response = requests.post(post_url, auth=AUTH, json=payload)
         response.raise_for_status()
-        logging.info(f"✅ Set featured image for post ID {post_id}")
+        logging.info(f"✅ Set featured image and updated ACF for post ID {post_id}")
     except Exception as e:
-        logging.error(f"❌ Failed to set featured image: {e}")
+        logging.error(f"❌ Failed to set featured image and update ACF: {e}")
+
 
 def append_image_block(post_id, image_url, post_type):
     try:
