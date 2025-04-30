@@ -1,2 +1,5 @@
 .env
 logs
+!.gitkeep
+src/images/*
+__pycache__
