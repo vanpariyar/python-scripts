@@ -29,6 +29,7 @@ def extract_caption_credit(image_input):
             iptc = IPTCInfo(input_stream, force=True)
             caption = iptc["credit"] if iptc["credit"] else None
             print( caption )
+            caption = caption.decode('UTF-8')
             credit = caption
             if caption or credit:
                 return caption, credit

@@ -123,7 +123,7 @@ def process_csv(csv_path, image_dir, post_type):
 
             # Extract caption and credit
             caption, credit = extract_caption_credit(image_path)
-            final_caption = f"Credit: {credit}" if credit else None
+            final_caption = f"Photo Courtesy: {credit}" if credit else None
 
             # Upload
             media_info = upload_image_to_wp(image_path)
