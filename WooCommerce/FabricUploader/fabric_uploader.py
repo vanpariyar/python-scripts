@@ -49,7 +49,7 @@ wcapi = API(
     consumer_key=WC_CONSUMER_KEY,
     consumer_secret=WC_CONSUMER_SECRET,
     version="wc/v3",
-    timeout=30
+    timeout=60
 )
 
 def get_closest_color_name(rgb_tuple):
